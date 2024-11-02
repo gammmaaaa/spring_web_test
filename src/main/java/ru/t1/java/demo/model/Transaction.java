@@ -1,24 +1,28 @@
 package ru.t1.java.demo.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "transaction")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "transactions")
 public class Transaction extends AbstractPersistable<Long> {
 
     @Column(name = "amount", precision = 19, scale = 2)
     private BigDecimal amount;
 
-    @Column(name = "client_id")
-    private Long clientId;
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinColumn(name = "account_id")
+    private Account account;
 
+    @Column(name = "time_transaction")
+    private LocalDateTime timeTransaction;
 }

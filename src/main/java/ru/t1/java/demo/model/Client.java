@@ -1,10 +1,11 @@
 package ru.t1.java.demo.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.AbstractPersistable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,19 +25,8 @@ public class Client extends AbstractPersistable<Long> {
     @Column(name = "middle_name")
     private String middleName;
 
-    @Column(name = "blocked_for")
-    private Boolean blockedFor;
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "client")
+    private List<Account> accounts = new ArrayList<>();
 
-    @Column(name = "blocked_whom")
-    private String blockedWhom;
-
-    @Override
-    public Long getId() {
-        return super.getId();
-    }
-
-    @Override
-    public void setId(Long id) {
-        super.setId(id);
-    }
 }
