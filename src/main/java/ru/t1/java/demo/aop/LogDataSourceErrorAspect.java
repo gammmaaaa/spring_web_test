@@ -18,7 +18,7 @@ import ru.t1.java.demo.service.DataSourceErrorLogService;
 public class LogDataSourceErrorAspect {
     private final DataSourceErrorLogService dataSourceErrorLogService;
 
-    @AfterThrowing(pointcut = "@annotation(LogDataSourceError)",
+    @AfterThrowing(pointcut = "@within(LogDataSourceError)",
             throwing = "e")
     public void afterThrowingCRUDErrorAdvice(JoinPoint joinPoint, Exception e) {
         log.info("AFTER THROWING IN: {}", joinPoint.getSignature().getName());

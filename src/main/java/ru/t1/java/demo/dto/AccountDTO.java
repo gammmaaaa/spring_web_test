@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-/**
- * DTO for {@link ru.t1.java.demo.model.Account}
- */
 
 @Data
 @AllArgsConstructor

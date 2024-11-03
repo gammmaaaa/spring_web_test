@@ -7,20 +7,21 @@ import ru.t1.java.demo.aop.LogDataSourceError;
 import ru.t1.java.demo.dto.AccountDTO;
 import ru.t1.java.demo.model.Account;
 import ru.t1.java.demo.service.AccountService;
-import ru.t1.java.demo.util.AccountMapper;
+import ru.t1.java.demo.util.AccountMapperImpl;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@LogDataSourceError
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/accounts")
+@LogDataSourceError
 public class AccountController {
     private final AccountService accountService;
-    private final AccountMapper accountMapper;
+    private final AccountMapperImpl accountMapper;
 
-    @GetMapping(value = "/accounts")
+    @GetMapping(value = "/findAll")
     public List<AccountDTO> getAllAccounts() {
         return accountService.getAllAccounts()
                 .stream()
@@ -28,27 +29,26 @@ public class AccountController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(value = "/accounts/{id}")
+    @GetMapping(value = "/find/{id}")
     public AccountDTO getAccountById(@PathVariable long id) {
         return accountMapper.toDTO(accountService.getAccountById(id));
     }
 
-    @LogDataSourceError
-    @PostMapping(value = "/accounts")
+    @PostMapping(value = "/add")
     public AccountDTO addNewAccount(@RequestBody AccountDTO accountDTO) {
         Account account = accountMapper.toEntity(accountDTO);
 
         return accountMapper.toDTO(accountService.saveAccount(account));
     }
 
-    @PutMapping(value = "/accounts")
+    @PutMapping(value = "/update")
     public AccountDTO updateAccount(@RequestBody AccountDTO accountDTO) {
         Account account = accountMapper.toEntity(accountDTO);
 
         return accountMapper.toDTO(accountService.saveAccount(account));
     }
 
-    @DeleteMapping(value = "/accounts/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public String deleteAccount(@PathVariable long id) {
         accountService.deleteAccountById(id);
 

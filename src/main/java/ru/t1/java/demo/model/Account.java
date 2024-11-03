@@ -17,9 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @Table(name = "accounts")
 public class Account extends AbstractPersistable<Long> {
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
-    @JoinColumn(name = "client_id")
-    private Client client;
 
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
@@ -28,7 +25,10 @@ public class Account extends AbstractPersistable<Long> {
     @Column(name = "balance", precision = 19, scale = 2)
     private BigDecimal balance;
 
-    @OneToMany(cascade = CascadeType.ALL,
-            mappedBy = "account")
+    @OneToMany(mappedBy = "account")
     private List<Transaction> transactions = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
 }

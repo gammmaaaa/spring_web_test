@@ -19,7 +19,7 @@ public class Transaction extends AbstractPersistable<Long> {
     @Column(name = "amount", precision = 19, scale = 2)
     private BigDecimal amount;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;
 

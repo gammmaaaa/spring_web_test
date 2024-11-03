@@ -3,6 +3,9 @@ package ru.t1.java.demo.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
+import ru.t1.java.demo.exception.TransactionException;
 import ru.t1.java.demo.model.Transaction;
 import ru.t1.java.demo.repository.TransactionRepository;
 import ru.t1.java.demo.service.TransactionService;
@@ -27,19 +30,19 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.findById(id).orElse(null);
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
-    public String saveTransaction(Transaction transaction) {
+    public Transaction saveTransaction(Transaction transaction) throws TransactionException {
         BigDecimal balance = transaction.getAccount().getBalance();
 
         BigDecimal diff = balance.subtract(transaction.getAmount());
         if (diff.compareTo(BigDecimal.ZERO) > 0) {
             transaction.setTimeTransaction(LocalDateTime.now());
             transaction.getAccount().setBalance(diff);
-            transactionRepository.save(transaction);
-            return "Transaction was completed successfully";
+            return transactionRepository.save(transaction);
         }
 
-        return "Not enough funds in account: " + transaction.getAccount();
+        throw new TransactionException("Not enough funds on account");
     }
 
     @Override

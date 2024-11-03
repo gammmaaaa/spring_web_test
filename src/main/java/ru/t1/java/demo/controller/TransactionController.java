@@ -3,10 +3,12 @@ package ru.t1.java.demo.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.t1.java.demo.aop.LogDataSourceError;
 import ru.t1.java.demo.dto.TransactionDTO;
+import ru.t1.java.demo.exception.TransactionException;
 import ru.t1.java.demo.model.Transaction;
 import ru.t1.java.demo.service.TransactionService;
-import ru.t1.java.demo.util.TransactionMapper;
+import ru.t1.java.demo.util.TransactionMapperImpl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,11 +16,13 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@LogDataSourceError
+@RequestMapping("/transactions")
 public class TransactionController {
     private final TransactionService transactionService;
-    private final TransactionMapper transactionMapper;
+    private final TransactionMapperImpl transactionMapper;
 
-    @GetMapping(value = "/transactions")
+    @GetMapping(value = "/findAll")
     public List<TransactionDTO> getAllTransactions() {
         return transactionService.getAllTransactions()
                 .stream()
@@ -26,18 +30,18 @@ public class TransactionController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping(value = "/transactions/{id}")
+    @GetMapping(value = "/find/{id}")
     public TransactionDTO getTransactionById(@PathVariable long id) {
         return transactionMapper.toDTO(transactionService.getTransactionById(id));
     }
 
-    @PostMapping(value = "/transactions")
-    public String addNewTransaction(@RequestBody TransactionDTO transactionDTO) {
+    @PostMapping(value = "/add")
+    public TransactionDTO addNewTransaction(@RequestBody TransactionDTO transactionDTO) throws TransactionException {
         Transaction transaction = transactionMapper.toEntity(transactionDTO);
-        return transactionService.saveTransaction(transaction);
+        return transactionMapper.toDTO(transactionService.saveTransaction(transaction));
     }
 
-    @DeleteMapping(value = "/transactions/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public String deleteAccount(@PathVariable long id) {
         transactionService.deleteTransactionById(id);
 

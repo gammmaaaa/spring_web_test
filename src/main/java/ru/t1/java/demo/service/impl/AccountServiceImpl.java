@@ -3,14 +3,11 @@ package ru.t1.java.demo.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.t1.java.demo.dto.AccountDTO;
 import ru.t1.java.demo.model.Account;
 import ru.t1.java.demo.repository.AccountRepository;
 import ru.t1.java.demo.service.AccountService;
-import ru.t1.java.demo.util.AccountMapper;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
