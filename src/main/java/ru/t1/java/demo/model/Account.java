@@ -2,7 +2,6 @@ package ru.t1.java.demo.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 import ru.t1.java.demo.model.enums.AccountTypeEnum;
 
 import java.math.BigDecimal;
@@ -16,8 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "accounts")
-public class Account extends AbstractPersistable<Long> {
-
+public class Account extends EntityObject {
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private AccountTypeEnum accountType;

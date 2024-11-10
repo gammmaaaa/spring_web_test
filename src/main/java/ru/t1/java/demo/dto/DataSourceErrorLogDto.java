@@ -7,22 +7,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
-/**
- * DTO for {@link ru.t1.java.demo.model.Client}
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ClientDto implements Serializable {
-    private Long id;
-    @JsonProperty("first_name")
-    private String firstName;
-    @JsonProperty("last_name")
-    private String lastName;
-    @JsonProperty("middle_name")
-    private String middleName;
+public class DataSourceErrorLogDto {
+
+    @JsonProperty("stacktrace")
+    private String stacktrace;
+
+    @JsonProperty("message")
+    private String message;
+
+    @JsonProperty("method_signature")
+    private String methodSignature;
 }

@@ -2,7 +2,6 @@ package ru.t1.java.demo.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "client")
-public class Client extends AbstractPersistable<Long> {
+public class Client extends EntityObject {
 
     @Column(name = "first_name")
     private String firstName;

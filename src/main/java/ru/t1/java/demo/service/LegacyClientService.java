@@ -3,7 +3,7 @@ package ru.t1.java.demo.service;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.t1.java.demo.dto.ClientDto;
+import ru.t1.java.demo.dto.ClientDTO;
 import ru.t1.java.demo.model.Client;
 import ru.t1.java.demo.repository.ClientRepository;
 import ru.t1.java.demo.util.ClientMapper;
@@ -27,9 +27,9 @@ public class LegacyClientService {
         getClient(1L);
     }
 
-    public ClientDto getClient(Long id) {
+    public ClientDTO getClient(Long id) {
         log.debug("Call method getClient with id {}", id);
-        ClientDto clientDto = null;
+        ClientDTO clientDto = null;
 
         if (cache.containsKey(id)) {
             return ClientMapper.toDto(cache.get(id));

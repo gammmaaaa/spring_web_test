@@ -1,15 +1,15 @@
 package ru.t1.java.demo.service;
 
-import ru.t1.java.demo.model.DataSourceErrorLog;
+import ru.t1.java.demo.dto.DataSourceErrorLogDto;
 
 import java.util.List;
 
 public interface DataSourceErrorLogService {
-    List<DataSourceErrorLog> getAllDataSourceErrors();
+    List<DataSourceErrorLogDto> getAllDataSourceErrors();
 
-    DataSourceErrorLog getDataSourceErrorById(long id);
+    DataSourceErrorLogDto getDataSourceErrorById(long id);
 
-    DataSourceErrorLog saveDataSourceError(DataSourceErrorLog dataSourceErrorLog);
+    DataSourceErrorLogDto saveDataSourceError(DataSourceErrorLogDto DataSourceErrorLogDto, String kafkaMessage);
 
     void deleteDataSourceErrorById(long id);
 }

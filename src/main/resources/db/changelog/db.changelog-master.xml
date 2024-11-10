@@ -29,4 +29,19 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
         <rollback/>
     </changeSet>
 
+    <changeSet id="insert-clients" author="Tarasov">
+        <sqlFile path="/db/changelog/changeset/MOCK_client.sql"/>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="insert-accounts" author="Tarasov">
+        <sqlFile path="/db/changelog/changeset/MOCK_accounts.sql"/>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="insert-column-kafka-message-data-source" author="Tarasov">
+        <sqlFile path="/db/changelog/changeset/add-data-source-kafka-message.sql"/>
+        <rollback/>
+    </changeSet>
+
 </databaseChangeLog>
