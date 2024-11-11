@@ -47,7 +47,7 @@ public class AccountController {
     public AccountDTO updateAccount(@RequestBody AccountDTO accountDTO) {
         Account account = accountMapper.toEntity(accountDTO);
 
-        return accountMapper.toDTO(accountService.saveNewAccount(account));
+        return accountMapper.toDTO(accountService.updateAccount(account));
     }
 
     @DeleteMapping(value = "/delete/{id}")

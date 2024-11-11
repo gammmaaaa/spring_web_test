@@ -33,9 +33,15 @@ import java.util.Map;
 @Slf4j
 @Configuration
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class KafkaClientConfig<T> {
+public class KafkaConfig<T> {
     @Value("${t1.kafka.consumer.client.group-id}")
-    private String groupId;
+    private String clientGroupId;
+    @Value("${t1.kafka.consumer.account.group-id}")
+    private String accountGroupId;
+    @Value("${t1.kafka.consumer.transaction.group-id}")
+    private String transactionGroupId;
+    @Value("${t1.kafka.consumer.transaction_accept.group-id}")
+    private String transactionAcceptGroupId;
     @Value("${t1.kafka.bootstrap.server}")
     private String servers;
     @Value("${t1.kafka.session.timeout.ms}")
@@ -52,7 +58,7 @@ public class KafkaClientConfig<T> {
     private String clientTopic;
 
 
-    private ConsumerFactory<String, T> consumerListenerFactory(String valueDefaultType) {
+    private ConsumerFactory<String, T> consumerListenerFactory(String valueDefaultType, String groupId) {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
@@ -77,8 +83,8 @@ public class KafkaClientConfig<T> {
         return factory;
     }
 
-    ConcurrentKafkaListenerContainerFactory<String, T> kafkaListenerContainerFactory(String valueDefaultType) {
-        ConsumerFactory<String, T> consumerFactory = consumerListenerFactory(valueDefaultType);
+    ConcurrentKafkaListenerContainerFactory<String, T> kafkaListenerContainerFactory(String valueDefaultType, String groupId) {
+        ConsumerFactory<String, T> consumerFactory = consumerListenerFactory(valueDefaultType, groupId);
         ConcurrentKafkaListenerContainerFactory<String, T> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factoryBuilder(consumerFactory, factory);
         return factory;
@@ -86,17 +92,20 @@ public class KafkaClientConfig<T> {
 
     @Bean
     ConcurrentKafkaListenerContainerFactory<String, ClientDTO> kafkaListenerContainerClientFactory() {
-        return (ConcurrentKafkaListenerContainerFactory<String, ClientDTO>) kafkaListenerContainerFactory("ru.t1.java.demo.dto.ClientDTO");
+        return (ConcurrentKafkaListenerContainerFactory<String, ClientDTO>) kafkaListenerContainerFactory
+                ("ru.t1.java.demo.dto.ClientDTO", clientGroupId);
     }
 
     @Bean
     ConcurrentKafkaListenerContainerFactory<String, AccountDTO> kafkaListenerContainerAccountFactory() {
-        return (ConcurrentKafkaListenerContainerFactory<String, AccountDTO>) kafkaListenerContainerFactory("ru.t1.java.demo.dto.AccountDTO");
+        return (ConcurrentKafkaListenerContainerFactory<String, AccountDTO>) kafkaListenerContainerFactory
+                ("ru.t1.java.demo.dto.AccountDTO", accountGroupId);
     }
 
     @Bean
     ConcurrentKafkaListenerContainerFactory<String, TransactionDTO> kafkaListenerContainerTransactionFactory() {
-        return (ConcurrentKafkaListenerContainerFactory<String, TransactionDTO>) kafkaListenerContainerFactory("ru.t1.java.demo.dto.TransactionDTO");
+        return (ConcurrentKafkaListenerContainerFactory<String, TransactionDTO>) kafkaListenerContainerFactory
+                ("ru.t1.java.demo.dto.TransactionDTO", transactionGroupId);
     }
 
     @Bean
