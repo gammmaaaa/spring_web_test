@@ -40,14 +40,14 @@ public class AccountController {
     public AccountDTO addNewAccount(@RequestBody AccountDTO accountDTO) {
         Account account = accountMapper.toEntity(accountDTO);
 
-        return accountMapper.toDTO(accountService.saveNewAccount(account));
+        return accountMapper.toDTO(accountService.saveAccount(account));
     }
 
     @PutMapping(value = "/update")
     public AccountDTO updateAccount(@RequestBody AccountDTO accountDTO) {
         Account account = accountMapper.toEntity(accountDTO);
 
-        return accountMapper.toDTO(accountService.updateAccount(account));
+        return accountMapper.toDTO(accountService.saveAccount(account));
     }
 
     @DeleteMapping(value = "/delete/{id}")
