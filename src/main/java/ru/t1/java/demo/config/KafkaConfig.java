@@ -40,8 +40,8 @@ public class KafkaConfig<T> {
     private String accountGroupId;
     @Value("${t1.kafka.consumer.transaction.group-id}")
     private String transactionGroupId;
-    @Value("${t1.kafka.consumer.transaction_accept.group-id}")
-    private String transactionAcceptGroupId;
+    @Value("${t1.kafka.consumer.transaction_result.group-id}")
+    private String transactionResultGroupId;
     @Value("${t1.kafka.bootstrap.server}")
     private String servers;
     @Value("${t1.kafka.session.timeout.ms}")
@@ -110,7 +110,8 @@ public class KafkaConfig<T> {
 
     @Bean
     ConcurrentKafkaListenerContainerFactory<String, TransactionResult> kafkaListenerContainerTransactionResultFactory() {
-        return (ConcurrentKafkaListenerContainerFactory<String, TransactionResult>) kafkaListenerContainerFactory("ru.t1.java.demo.dto.TransactionResult");
+        return (ConcurrentKafkaListenerContainerFactory<String, TransactionResult>) kafkaListenerContainerFactory
+                ("ru.t1.java.demo.dto.TransactionResult", transactionResultGroupId);
     }
 
     private void factoryBuilder(ConsumerFactory<String, T> consumerFactory, ConcurrentKafkaListenerContainerFactory<String, T> factory) {
