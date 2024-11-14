@@ -23,7 +23,6 @@ import org.springframework.util.backoff.FixedBackOff;
 import ru.t1.java.demo.dto.AccountDTO;
 import ru.t1.java.demo.dto.ClientDTO;
 import ru.t1.java.demo.dto.TransactionDTO;
-import ru.t1.java.demo.dto.TransactionResult;
 import ru.t1.java.demo.kafka.KafkaClientProducer;
 import ru.t1.java.demo.kafka.MessageDeserializer;
 
@@ -40,8 +39,6 @@ public class KafkaConfig<T> {
     private String accountGroupId;
     @Value("${t1.kafka.consumer.transaction.group-id}")
     private String transactionGroupId;
-    @Value("${t1.kafka.consumer.transaction_accept.group-id}")
-    private String transactionAcceptGroupId;
     @Value("${t1.kafka.bootstrap.server}")
     private String servers;
     @Value("${t1.kafka.session.timeout.ms}")
