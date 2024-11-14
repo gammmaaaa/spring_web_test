@@ -1,0 +1,3 @@
+ALTER TABLE accounts
+    ADD status VARCHAR(25) DEFAULT 'OPEN' NOT NULL,
+ADD frozen_amount NUMERIC(19, 2) DEFAULT 0 NOT NULL;

@@ -2,11 +2,17 @@ package ru.t1.java.demo.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.t1.java.demo.dto.TransactionForAccept;
 import ru.t1.java.demo.exception.TransactionException;
+import ru.t1.java.demo.kafka.KafkaClientProducer;
+import ru.t1.java.demo.mapper.TransactionMapper;
 import ru.t1.java.demo.model.Transaction;
+import ru.t1.java.demo.model.enums.AccountStatusEnum;
+import ru.t1.java.demo.model.enums.TransactionStatusEnum;
 import ru.t1.java.demo.repository.TransactionRepository;
 import ru.t1.java.demo.service.TransactionService;
 
@@ -19,6 +25,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
+    private final KafkaClientProducer kafkaClientProducer;
+    private final TransactionMapper transactionMapper;
+
+    @Value("${t1.kafka.topic.transaction_accept}")
+    private String transactionAcceptTopic;
 
     @Override
     public List<Transaction> getAllTransactions() {
@@ -33,16 +44,30 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public Transaction saveTransaction(Transaction transaction) throws TransactionException {
-        BigDecimal balance = transaction.getAccount().getBalance();
+        if (transaction.getAccount().getAccountStatus().equals(AccountStatusEnum.OPEN)) {
 
-        BigDecimal diff = balance.subtract(transaction.getAmount());
-        if (diff.compareTo(BigDecimal.ZERO) > 0) {
+            BigDecimal balance = transaction.getAccount().getBalance();
+            BigDecimal diff = balance.subtract(transaction.getAmount());
+
             transaction.setTimeTransaction(LocalDateTime.now());
             transaction.getAccount().setBalance(diff);
-            return transactionRepository.save(transaction);
-        }
+            transaction.setTransactionStatus(TransactionStatusEnum.REQUESTED);
+            Transaction transactionSaved = transactionRepository.save(transaction);
 
-        throw new TransactionException("Not enough funds on account");
+            TransactionForAccept transactionForAccept = transactionMapper.toAccept(transactionSaved);
+            kafkaClientProducer.sendTo(transactionAcceptTopic, transactionForAccept);
+
+            return transactionSaved;
+
+        } else {
+            throw new TransactionException("Your account status is: " + transaction.getAccount().getAccountStatus().name());
+        }
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Override
+    public Transaction updateTransaction(Transaction transaction) {
+        return transactionRepository.save(transaction);
     }
 
     @Override

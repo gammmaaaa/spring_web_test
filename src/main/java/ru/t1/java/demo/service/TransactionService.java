@@ -12,5 +12,7 @@ public interface TransactionService {
 
     Transaction saveTransaction(Transaction transaction) throws TransactionException;
 
+    Transaction updateTransaction(Transaction transaction);
+
     void deleteTransactionById(long id);
 }

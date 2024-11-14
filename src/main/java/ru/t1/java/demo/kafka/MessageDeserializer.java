@@ -9,14 +9,14 @@ import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Component
-public class MessageDeserializer<T> extends JsonDeserializer<T> {
+public class MessageDeserializer extends JsonDeserializer {
 
     private static String getMessage(byte[] data) {
         return new String(data, StandardCharsets.UTF_8);
     }
 
     @Override
-    public T deserialize(String topic, Headers headers, byte[] data) {
+    public Object deserialize(String topic, Headers headers, byte[] data) {
         try {
             return super.deserialize(topic, headers, data);
         } catch (Exception e) {
@@ -26,7 +26,7 @@ public class MessageDeserializer<T> extends JsonDeserializer<T> {
     }
 
     @Override
-    public T deserialize(String topic, byte[] data) {
+    public Object deserialize(String topic, byte[] data) {
         try {
             return super.deserialize(topic, data);
         } catch (Exception e) {

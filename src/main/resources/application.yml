@@ -30,7 +30,7 @@ t1:
       server: ${KAFKA_SERVER:localhost:9092}
     session:
       timeout:
-        ms: 450000
+        ms: 30000
     max:
       partition:
         fetch:
@@ -38,10 +38,10 @@ t1:
       poll:
         records: 1
         interval:
-          ms: 100000
+          ms: 300000
     heartbeat:
       interval:
-        ms: 150000
+        ms: 3000
     consumer:
       client:
         group-id: t1-demo-client
@@ -49,6 +49,8 @@ t1:
         group-id: t1-demo-account
       transaction:
         group-id: t1-demo-transaction
+      transaction_result:
+        group-id: t1-demo-transaction-result
     producer:
       enable: true
     topic:
@@ -57,6 +59,8 @@ t1:
       accounts: t1_demo_accounts
       transactions: t1_demo_transactions
       metrics: t1_demo_metrics
+      transaction_accept: t1_demo_transaction_accept
+      transaction_result: t1_demo_transaction_result
 
     listener:
       poll-timeout: 1000
