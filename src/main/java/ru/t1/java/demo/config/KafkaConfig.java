@@ -113,7 +113,7 @@ public class KafkaConfig<T> {
         return (ConcurrentKafkaListenerContainerFactory<String, TransactionResult>) kafkaListenerContainerFactory
                 ("ru.t1.java.demo.dto.TransactionResult", transactionResultGroupId);
     }
-
+  
     private void factoryBuilder(ConsumerFactory<String, T> consumerFactory, ConcurrentKafkaListenerContainerFactory<String, T> factory) {
         factory.setConsumerFactory(consumerFactory);
         factory.setBatchListener(true);
