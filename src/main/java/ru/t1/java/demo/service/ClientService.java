@@ -1,12 +1,18 @@
 package ru.t1.java.demo.service;
 
+import ru.t1.java.demo.dto.ClientDTO;
 import ru.t1.java.demo.model.Client;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface ClientService {
-    List<Client> parseJson() throws IOException;
+    List<Client> registerClients(List<Client> clients);
+
+    Client registerClient(Client client);
+
+    List<ClientDTO> parseJson();
+
+    void clearMiddleName(List<ClientDTO> dtos);
 
     Client getClientById(long id);
 }

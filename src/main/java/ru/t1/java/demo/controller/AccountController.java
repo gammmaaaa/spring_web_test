@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.t1.java.demo.aop.LogDataSourceError;
+import ru.t1.java.demo.aop.Metric;
 import ru.t1.java.demo.dto.AccountDTO;
 import ru.t1.java.demo.model.Account;
 import ru.t1.java.demo.service.AccountService;
@@ -15,8 +16,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/accounts")
 @LogDataSourceError
+@Metric(time = 1000L)
+@RequestMapping("/accounts")
 public class AccountController {
     private final AccountService accountService;
     private final AccountMapperImpl accountMapper;

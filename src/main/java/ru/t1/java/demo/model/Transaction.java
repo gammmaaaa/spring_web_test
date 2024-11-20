@@ -2,7 +2,6 @@ package ru.t1.java.demo.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "transactions")
-public class Transaction extends AbstractPersistable<Long> {
+public class Transaction extends EntityObject {
 
     @Column(name = "amount", precision = 19, scale = 2)
     private BigDecimal amount;
@@ -25,4 +24,14 @@ public class Transaction extends AbstractPersistable<Long> {
 
     @Column(name = "time_transaction")
     private LocalDateTime timeTransaction;
+
+    @Override
+    public Long getId() {
+        return super.getId();
+    }
+
+    @Override
+    public void setId(Long id) {
+        super.setId(id);
+    }
 }
