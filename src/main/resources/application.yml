@@ -83,3 +83,12 @@ integration:
   resource: /bsc-wire-mock/api/client/check
   retry-count: 3
   retry-backoff: 1000
+
+integration_service_2:
+  url: http://localhost:8081
+  resource-check: /checkClient
+  resource-login: /api/auth/signin
+  retry-count: 3
+  retry-backoff: 1000
+  user: user_first_service
+  password: qwerty2024

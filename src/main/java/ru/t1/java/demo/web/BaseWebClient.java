@@ -21,9 +21,9 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public abstract class BaseWebClient {
 
-    @Value("${integration.retry-count}")
+    @Value("${integration_service_2.retry-count}")
     private Integer retryCount;
-    @Value("${integration.retry-backoff}")
+    @Value("${integration_service_2.retry-backoff}")
     private Integer retryBackoff;
 
     private final WebClient webClient;

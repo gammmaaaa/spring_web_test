@@ -2,11 +2,17 @@ package ru.t1.java.demo.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.t1.java.demo.aop.*;
+import ru.t1.java.demo.dto.ClientDTO;
 import ru.t1.java.demo.exception.ClientException;
+import ru.t1.java.demo.model.Client;
 import ru.t1.java.demo.service.ClientService;
+import ru.t1.java.demo.util.ClientMapper;
 
 import java.io.IOException;
 
@@ -32,6 +38,16 @@ public class ClientController {
 //            log.info("Catching exception from ClientController");
 //            throw new ClientException();
 //        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Client> register(@RequestBody ClientDTO clientDto) {
+        log.info("Registering client: {}", clientDto);
+        Client client = clientService.registerClient(
+                ClientMapper.toEntity(clientDto)
+        );
+        log.info("Client registered: {}", client.getId());
+        return ResponseEntity.ok().body(client);
     }
 
 }

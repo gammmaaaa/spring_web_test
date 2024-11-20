@@ -20,7 +20,7 @@ import java.time.Duration;
 @Configuration
 @RequiredArgsConstructor
 public class CheckClientConfig {
-    @Value("${integration.url}")
+    @Value("${integration_service_2.url}")
     private String url;
 
     private final ConnectionProvider connProvider = ConnectionProvider

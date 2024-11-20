@@ -24,6 +24,12 @@ public class Client extends EntityObject {
     @Column(name = "middle_name")
     private String middleName;
 
+    @Column(name = "blocked_for")
+    private Boolean blockedFor;
+
+    @Column(name = "blocked_whom")
+    private String blockedWhom;
+
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "client")
     private List<Account> accounts = new ArrayList<>();

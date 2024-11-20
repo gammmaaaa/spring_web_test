@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.t1.java.demo.dto.TransactionForAccept;
 import ru.t1.java.demo.exception.TransactionException;
@@ -41,10 +40,16 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.findById(id).orElse(null);
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional
     @Override
     public Transaction saveTransaction(Transaction transaction) throws TransactionException {
-        if (transaction.getAccount().getAccountStatus().equals(AccountStatusEnum.OPEN)) {
+        if (Boolean.TRUE.equals(transaction.getAccount().getClient().getBlockedFor())) {
+            transaction.setTransactionStatus(TransactionStatusEnum.REJECTED);
+            transaction.setTimeTransaction(LocalDateTime.now());
+            return transactionRepository.save(transaction);
+        }
+
+        if (AccountStatusEnum.OPEN.equals(transaction.getAccount().getAccountStatus())) {
 
             BigDecimal balance = transaction.getAccount().getBalance();
             BigDecimal diff = balance.subtract(transaction.getAmount());
@@ -64,7 +69,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional
     @Override
     public Transaction updateTransaction(Transaction transaction) {
         return transactionRepository.save(transaction);
