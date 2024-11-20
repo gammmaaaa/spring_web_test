@@ -44,4 +44,14 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
         <rollback/>
     </changeSet>
 
+    <changeSet id="insert-columns-status-frozen-accounts" author="Tarasov">
+        <sqlFile path="/db/changelog/changeset/add-columns-accounts.sql"/>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="insert-column-status-transactions" author="Tarasov">
+        <sqlFile path="/db/changelog/changeset/add-column-transactions.sql"/>
+        <rollback/>
+    </changeSet>
+
 </databaseChangeLog>

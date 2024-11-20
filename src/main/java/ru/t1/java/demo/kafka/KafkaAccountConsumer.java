@@ -26,7 +26,7 @@ public class KafkaAccountConsumer {
         log.info("Account consumer: Обработка новых сообщений");
 
         try {
-            accountService.saveAccount(accountMapper.toEntity(message));
+            accountService.saveNewAccount(accountMapper.toEntity(message));
         } finally {
             ack.acknowledge();
         }

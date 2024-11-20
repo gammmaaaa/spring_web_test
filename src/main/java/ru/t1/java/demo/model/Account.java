@@ -2,6 +2,7 @@ package ru.t1.java.demo.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.t1.java.demo.model.enums.AccountStatusEnum;
 import ru.t1.java.demo.model.enums.AccountTypeEnum;
 
 import java.math.BigDecimal;
@@ -20,8 +21,15 @@ public class Account extends EntityObject {
     @Enumerated(EnumType.STRING)
     private AccountTypeEnum accountType;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private AccountStatusEnum accountStatus;
+
     @Column(name = "balance", precision = 19, scale = 2)
     private BigDecimal balance;
+
+    @Column(name = "frozen_amount", precision = 19, scale = 2)
+    private BigDecimal frozenAmount;
 
     @OneToMany(mappedBy = "account")
     private List<Transaction> transactions = new ArrayList<>();

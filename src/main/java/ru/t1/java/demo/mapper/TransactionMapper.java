@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 import ru.t1.java.demo.dto.TransactionDTO;
+import ru.t1.java.demo.dto.TransactionForAccept;
 import ru.t1.java.demo.model.Transaction;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
@@ -12,4 +13,6 @@ public interface TransactionMapper {
     Transaction toEntity(TransactionDTO transactionDTO);
 
     TransactionDTO toDTO(Transaction transaction);
+
+    TransactionForAccept toAccept(Transaction transaction);
 }

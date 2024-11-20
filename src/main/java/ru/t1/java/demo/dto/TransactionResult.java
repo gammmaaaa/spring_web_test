@@ -6,28 +6,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import ru.t1.java.demo.model.enums.TransactionStatusEnum;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TransactionDTO implements Serializable {
-
-    private Long id;
-    @JsonProperty("amount")
-    private BigDecimal amount;
-
+public class TransactionResult {
     @JsonProperty("account_id")
     private Long accountId;
 
-    @JsonProperty("time_transaction")
-    private LocalDateTime timeTransaction;
+    @JsonProperty("transaction_id")
+    private Long transactionId;
 
-    @JsonProperty("status")
-    private String status;
+    @JsonProperty("transaction_status")
+    private TransactionStatusEnum transactionStatus;
 }

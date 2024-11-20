@@ -29,7 +29,7 @@ public class KafkaClientProducer {
 
     public void sendTo(String topic, Object o) {
         try {
-            template.send(topic, o).get();
+            template.send(topic, o);
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         } finally {

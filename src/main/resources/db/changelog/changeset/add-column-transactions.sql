@@ -1,0 +1,2 @@
+ALTER TABLE transactions
+    ADD status VARCHAR(25) DEFAULT 'REQUESTED' NOT NULL;

@@ -7,30 +7,31 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AccountDTO implements Serializable {
+public class TransactionForAccept {
 
-    private Long id;
     @JsonProperty("client_id")
     private Long clientId;
 
-    @JsonProperty("type")
-    private String accountType;
+    @JsonProperty("account_id")
+    private Long accountId;
 
-    @JsonProperty("balance")
-    private BigDecimal balance;
+    @JsonProperty("transaction_id")
+    private Long transactionId;
 
-    @JsonProperty("frozen_amount")
-    private BigDecimal frozenAmount;
+    @JsonProperty("transaction_amount")
+    private BigDecimal transactionAmount;
 
-    @JsonProperty("status")
-    private String status;
+    @JsonProperty("account_balance")
+    private BigDecimal accountBalance;
+
+    @JsonProperty("time_transaction")
+    private LocalDateTime timeTransaction;
 }

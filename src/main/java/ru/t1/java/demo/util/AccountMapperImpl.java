@@ -34,6 +34,8 @@ public class AccountMapperImpl implements AccountMapper {
                 .accountType(account.getAccountType().name())
                 .balance(account.getBalance())
                 .clientId(account.getClient().getId())
+                .frozenAmount(account.getFrozenAmount())
+                .status(account.getAccountStatus().name())
                 .build();
     }
 }
