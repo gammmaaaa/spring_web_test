@@ -24,6 +24,8 @@ logging:
     ru.t1.java.demo.controller.ClientController: DEBUG
 
 t1:
+  count:
+    transactions-rejected: 7
   scan-path: ru.t1.java.demo
   kafka:
     bootstrap:

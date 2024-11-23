@@ -2,33 +2,25 @@ package ru.t1.java.demo.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.t1.java.demo.dto.TransactionForAccept;
 import ru.t1.java.demo.exception.TransactionException;
-import ru.t1.java.demo.kafka.KafkaClientProducer;
-import ru.t1.java.demo.mapper.TransactionMapper;
 import ru.t1.java.demo.model.Transaction;
-import ru.t1.java.demo.model.enums.AccountStatusEnum;
-import ru.t1.java.demo.model.enums.TransactionStatusEnum;
 import ru.t1.java.demo.repository.TransactionRepository;
 import ru.t1.java.demo.service.TransactionService;
+import ru.t1.java.demo.service.impl.handler.impl.TransactionHandlerChain;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
-    private final TransactionRepository transactionRepository;
-    private final KafkaClientProducer kafkaClientProducer;
-    private final TransactionMapper transactionMapper;
 
-    @Value("${t1.kafka.topic.transaction_accept}")
-    private String transactionAcceptTopic;
+    private final TransactionRepository transactionRepository;
+    private final TransactionHandlerChain transactionHandlerChain;
+
 
     @Override
     public List<Transaction> getAllTransactions() {
@@ -43,30 +35,8 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional
     @Override
     public Transaction saveTransaction(Transaction transaction) throws TransactionException {
-        if (Boolean.TRUE.equals(transaction.getAccount().getClient().getBlockedFor())) {
-            transaction.setTransactionStatus(TransactionStatusEnum.REJECTED);
-            transaction.setTimeTransaction(LocalDateTime.now());
-            return transactionRepository.save(transaction);
-        }
-
-        if (AccountStatusEnum.OPEN.equals(transaction.getAccount().getAccountStatus())) {
-
-            BigDecimal balance = transaction.getAccount().getBalance();
-            BigDecimal diff = balance.subtract(transaction.getAmount());
-
-            transaction.setTimeTransaction(LocalDateTime.now());
-            transaction.getAccount().setBalance(diff);
-            transaction.setTransactionStatus(TransactionStatusEnum.REQUESTED);
-            Transaction transactionSaved = transactionRepository.save(transaction);
-
-            TransactionForAccept transactionForAccept = transactionMapper.toAccept(transactionSaved);
-            kafkaClientProducer.sendTo(transactionAcceptTopic, transactionForAccept);
-
-            return transactionSaved;
-
-        } else {
-            throw new TransactionException("Your account status is: " + transaction.getAccount().getAccountStatus().name());
-        }
+        transactionHandlerChain.create().handle(transaction);
+        return transaction;
     }
 
     @Transactional

@@ -54,4 +54,9 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
         <rollback/>
     </changeSet>
 
+    <changeSet id="insert-column-blocked-time-client" author="Tarasov">
+        <sqlFile path="/db/changelog/changeset/add-column-client.sql"/>
+        <rollback/>
+    </changeSet>
+
 </databaseChangeLog>

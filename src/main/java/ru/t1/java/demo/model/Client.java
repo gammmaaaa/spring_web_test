@@ -3,6 +3,7 @@ package ru.t1.java.demo.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,9 @@ public class Client extends EntityObject {
 
     @Column(name = "blocked_whom")
     private String blockedWhom;
+
+    @Column(name = "blocked_time")
+    private LocalDateTime blockedTime;
 
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "client")
