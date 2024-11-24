@@ -1,0 +1,61 @@
+{
+  "id": "ce5a73ec-8a33-4fc7-919d-f0628c7118ed",
+  "name": "/api/signIn",
+  "request": {
+    "url": "/api/signIn",
+    "method": "POST"
+  },
+  "response": {
+    "status": 200,
+    "base64Body": "",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  },
+  "uuid": "ce5a73ec-8a33-4fc7-919d-f0628c7118ed",
+  "persistent": true,
+  "priority": 1,
+  "scenarioName": "test",
+  "requiredScenarioState": "Started",
+  "metadata": {
+    "proxyUrlPrefixToRemove": "",
+    "proxyEnable": false,
+    "proxyBaseUrl": "http://",
+    "proxyResponseHeaders": {
+      "Content-Type": "application/json"
+    },
+    "responseHeaders": {
+      "Content-Type": "application/json"
+    },
+    "csvTableHeader": "",
+    "csvMQTableHeader": "",
+    "isCSV": false,
+    "isMqCSV": false,
+    "isAsyncCsv": [
+      false
+    ]
+  },
+  "insertionIndex": 1,
+  "postServeActions": [
+    {
+      "name": "asyncAction",
+      "parameters": {
+        "mqAsyncAction": false,
+        "isAsyncAction": false,
+        "httpResponse": [
+          {
+            "asyncEnabled": false,
+            "responseDefinition": {
+              "headers": {
+                "Content-Type": [
+                  "application/json"
+                ]
+              }
+            }
+          }
+        ],
+        "mqResponse": {}
+      }
+    }
+  ]
+}

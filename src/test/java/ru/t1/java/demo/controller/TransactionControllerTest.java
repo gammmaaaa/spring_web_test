@@ -1,6 +1,6 @@
 package ru.t1.java.demo.controller;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -41,8 +41,8 @@ public class TransactionControllerTest {
     private static Transaction transaction1;
     private static Transaction transaction2;
 
-    @BeforeAll
-    public static void setup() {
+    @BeforeEach
+    public void setup() {
         transaction1 = getTransaction();
         transaction2 = getTransaction();
         transactionDTO1 = getTransactionDTO(1L, 1L);

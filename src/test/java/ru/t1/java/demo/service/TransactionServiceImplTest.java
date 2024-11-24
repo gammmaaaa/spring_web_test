@@ -1,93 +1,98 @@
 package ru.t1.java.demo.service;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.t1.java.demo.model.Account;
+import ru.t1.java.demo.exception.TransactionException;
 import ru.t1.java.demo.model.Transaction;
 import ru.t1.java.demo.repository.TransactionRepository;
 import ru.t1.java.demo.service.impl.TransactionServiceImpl;
+import ru.t1.java.demo.service.impl.handler.TransactionHandler;
+import ru.t1.java.demo.service.impl.handler.impl.TransactionHandlerChain;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static ru.t1.java.demo.model.enums.TransactionStatusEnum.ACCEPTED;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TransactionServiceImplTest {
+class TransactionServiceImplTest {
 
     @Mock
-    TransactionRepository transactionRepository;
+    private TransactionRepository transactionRepository;
+
+    @Mock
+    private TransactionHandlerChain transactionHandlerChain;
 
     @InjectMocks
-    TransactionServiceImpl transactionService;
+    private TransactionServiceImpl transactionService;
 
-    private static Transaction transaction1;
-    private static Transaction transaction2;
+    @Test
+    @DisplayName("Тестирование метода getAllTransactions для сервиса TransactionService")
+    void testGetAllTransactions() {
+        Transaction transaction1 = Transaction.builder().build();
+        Transaction transaction2 = Transaction.builder().build();
+        List<Transaction> transactions = Arrays.asList(transaction1, transaction2);
+        when(transactionRepository.findAll()).thenReturn(transactions);
 
-    @BeforeAll
-    public static void setup() {
-        transaction1 = getTransaction();
-        transaction1.setId(1L);
-        transaction2 = getTransaction();
-        transaction2.setId(2L);
+        List<Transaction> result = transactionService.getAllTransactions();
+
+        assertEquals(2, result.size());
+        verify(transactionRepository).findAll();
     }
 
     @Test
-    @DisplayName("JUnit test для getAllTransactions метода")
-    void handleGetAllTransactions_ReturnValidList() throws Exception {
-        //given
-        var transactions = List.of(transaction1, transaction2);
+    @DisplayName("Тестирование метода getTransactionById для сервиса TransactionService")
+    void testGetTransactionById() {
+        long id = 1L;
+        Transaction transaction = Transaction.builder().build();
+        when(transactionRepository.findById(id)).thenReturn(Optional.of(transaction));
 
-        //when
-        Mockito.when(transactionRepository.findAll()).thenReturn(transactions);
-        List<Transaction> requestedTransactions = transactionService.getAllTransactions();
+        Transaction result = transactionService.getTransactionById(id);
 
-        //then
-        assertThat(requestedTransactions).isNotNull();
-        assertThat(requestedTransactions.size()).isEqualTo(2);
-        assertEquals(transactions, requestedTransactions);
+        assertNotNull(result);
+        verify(transactionRepository).findById(id);
     }
 
     @Test
-    @DisplayName("JUnit test для getAllTransactions метода")
-    void handleGetOneTransaction_ReturnValidTransaction() throws Exception {
-        //given
-        var transactionOptional = Optional.of(transaction1);
+    @DisplayName("Тестирование метода saveTransaction для сервиса TransactionService")
+    void testSaveTransaction() throws TransactionException {
+        Transaction transaction = Transaction.builder().build();
+        TransactionHandler mockHandler = mock(TransactionHandler.class);
 
-        //when
-        Mockito.when(transactionRepository.findById(1L)).thenReturn(transactionOptional);
-        Transaction requestedTransaction = transactionService.getTransactionById(1);
+        when(transactionHandlerChain.create()).thenReturn(mockHandler);
+        doNothing().when(mockHandler).handle(transaction);
 
-        //then
-        assertThat(requestedTransaction).isNotNull();
-        assertEquals(requestedTransaction, transaction1);
+        Transaction result = transactionService.saveTransaction(transaction);
+
+        assertNotNull(result);
     }
 
-    private static Transaction getTransaction() {
-        return Transaction.builder()
-                .account(Account.builder()
-                        .balance(BigDecimal.valueOf(1000L))
-                        .build())
-                .transactionStatus(ACCEPTED)
-                .amount(BigDecimal.valueOf(1000L))
-                .timeTransaction(LocalDateTime.of(
-                        1900,
-                        1,
-                        1,
-                        0,
-                        0,
-                        0
-                ))
-                .build();
+    @Test
+    @DisplayName("Тестирование метода updateTransaction для сервиса TransactionService")
+    void testUpdateTransaction() {
+        Transaction transaction = Transaction.builder().build();
+        when(transactionRepository.save(transaction)).thenReturn(transaction);
+
+        Transaction result = transactionService.updateTransaction(transaction);
+
+        assertNotNull(result);
+        verify(transactionRepository).save(transaction);
+    }
+
+    @Test
+    @DisplayName("Тестирование метода deleteTransactionById для сервиса TransactionService")
+    void testDeleteTransactionById() {
+        long id = 1L;
+
+        transactionService.deleteTransactionById(id);
+
+        verify(transactionRepository).deleteById(id);
     }
 }
