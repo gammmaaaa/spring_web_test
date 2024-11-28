@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.t1.java.demo.aop.*;
+import ru.t1.java.demo.aop.HandlingResult;
+import ru.t1.java.demo.aop.LogException;
+import ru.t1.java.demo.aop.Track;
 import ru.t1.java.demo.dto.ClientDTO;
 import ru.t1.java.demo.exception.ClientException;
 import ru.t1.java.demo.model.Client;
@@ -19,8 +21,6 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@LogDataSourceError
-@Metric(time = 1000L)
 public class ClientController {
 
     private final ClientService clientService;
