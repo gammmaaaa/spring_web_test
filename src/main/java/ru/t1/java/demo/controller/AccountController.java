@@ -3,12 +3,12 @@ package ru.t1.java.demo.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.t1.java.demo.aop.LogDataSourceError;
-import ru.t1.java.demo.aop.Metric;
 import ru.t1.java.demo.dto.AccountDTO;
 import ru.t1.java.demo.model.Account;
 import ru.t1.java.demo.service.AccountService;
 import ru.t1.java.demo.util.AccountMapperImpl;
+import ru.t1.java.starter.annotations.LogDataSourceError;
+import ru.t1.java.starter.annotations.Metric;
 
 import java.util.List;
 import java.util.stream.Collectors;

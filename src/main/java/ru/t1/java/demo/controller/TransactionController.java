@@ -3,8 +3,6 @@ package ru.t1.java.demo.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.t1.java.demo.aop.LogDataSourceError;
-import ru.t1.java.demo.aop.Metric;
 import ru.t1.java.demo.dto.TransactionDTO;
 import ru.t1.java.demo.exception.TransactionException;
 import ru.t1.java.demo.model.Transaction;
@@ -17,8 +15,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@LogDataSourceError
-@Metric(time = 1000L)
 @RequestMapping("/transactions")
 public class TransactionController {
     private final TransactionService transactionService;

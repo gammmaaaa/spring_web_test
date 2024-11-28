@@ -24,10 +24,7 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
         <rollback/>
     </changeSet>
 
-    <changeSet id="create-data-source-error-logs" author="Tarasov">
-        <sqlFile path="/db/changelog/changeset/create-data-source-error-logs-table.sql"/>
-        <rollback/>
-    </changeSet>
+    <include file="classpath:db/changelog/changeset/create-data-source-error-logs-table.sql"/>
 
     <changeSet id="insert-clients" author="Tarasov">
         <sqlFile path="/db/changelog/changeset/MOCK_client.sql"/>
